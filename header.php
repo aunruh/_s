@@ -25,25 +25,42 @@ if( $detect->isMobile() && !$detect->isTablet() ){
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title><?php wp_title( '|', true, 'right' ); ?></title>
+<title><?php wp_title( '&mdash;', true, 'right' ); ?></title>
 <link rel="profile" href="http://gmpg.org/xfn/11">
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 
-<?php wp_head(); ?>
+<?php wp_head(); 
+
+// $descr = get_field('website_description', 'option');
+// $title = wp_title( '&mdash;', false, 'right' );
+
+// echo '<meta name="description" content="'.$descr.'"/>'; 
+
+// $attachmentId = get_field('share_image', 'option');
+// $image = wp_get_attachment_image_src( $attachmentId, "fb" );
+// echo '<meta property="og:type" content="website">';			
+// echo '<meta property="og:image" content="'.$image[0].'">';
+// echo '<meta property="og:image:width" content="'.$image[1].'">';
+// echo '<meta property="og:image:height" content="'.$image[2].'">';
+// echo '<meta property="og:title" content="'.$title.'">';
+// echo '<meta property="og:url" content="'.curPageURL().'">';
+// echo '<meta property="og:site_name" content="'.wp_title( '–', false, 'right' ).'">';
+// echo '<meta property="og:description" content="'.$descr.'">';
+
+// the_field('google_analytics', 'option');
+
+?>
 </head>
 
 <body <?php body_class($mobile); ?>>
 <div id="page" class="hfeed site">
-	<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', '_s' ); ?></a>
 
 	<header id="masthead" class="site-header" role="banner">
 		<div class="site-branding">
 			<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-			<h2 class="site-description"><?php bloginfo( 'description' ); ?></h2>
 		</div>
 
 		<nav id="site-navigation" class="main-navigation" role="navigation">
-			<button class="menu-toggle"><?php _e( 'Primary Menu', '_s' ); ?></button>
 			<?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
 		</nav><!-- #site-navigation -->
 	</header><!-- #masthead -->
