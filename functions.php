@@ -80,8 +80,14 @@ function _s_scripts() {
 	wp_enqueue_style( '_s-style', get_template_directory_uri() . '/css/style.css' );
 
 	$templateDir = get_bloginfo('template_directory');
-	wp_enqueue_script( '_s-main', get_template_directory_uri() . '/js/main.js', array('jQuery'), '1', true );
-	wp_localize_script( '_s-main', 'passedData', array( 'templateDir' => $templateDir ) );
+
+	wp_enqueue_script( '_s-plugins', get_template_directory_uri() . '/js/plugins/plugins-ck.js', array('jquery'), '1', true );
+
+	wp_enqueue_script( '_s-lazyload', get_template_directory_uri() . '/js/lazyload.js', array('jquery'), '1', true );
+	wp_localize_script( '_s-lazyload', 'passedData', array( 'templateDir' => $templateDir ) );
+
+	wp_enqueue_script( '_s-main', get_template_directory_uri() . '/js/main.js', array('jquery'), '1', true );
+	wp_localize_script( '_s-main', 'passedData', array( 'templateDir' => $templateDir, 'ajaxUrl' => admin_url( 'admin-ajax.php' ), 'title' => get_bloginfo( 'name' ) ) );
 }
 add_action( 'wp_enqueue_scripts', '_s_scripts' ); 
 
@@ -96,3 +102,21 @@ function curPageURL() {
 	}
 	return $pageURL;
 }
+
+/**
+ * Backend changes and style.
+ */
+require get_template_directory() . '/inc/backend.php';
+
+/**
+ * Here's what creates the website output
+ */
+require get_template_directory().'/layout/layout.php';
+
+/**
+ * Menu walker that gives me page/post Id's as <a href="#" id="postid">post</a> for ajax
+ */
+require get_template_directory() . '/inc/mywalker.php';	
+
+/*ajax*/
+require get_template_directory() . '/inc/ajax.php';

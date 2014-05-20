@@ -1,3 +1,12 @@
 [submodule "inc/mobiledetect"]
 	path = inc/mobiledetect
 	url = https://github.com/serbanghita/Mobile-Detect.git
+[submodule "js/plugins/hisrc"]
+	path = js/plugins/hisrc
+	url = git@github.com:aunruh/hisrc.git
+[submodule "js/plugins/underscore"]
+	path = js/plugins/underscore
+	url = https://github.com/jashkenas/underscore.git
+[submodule "js/plugins/history"]
+	path = js/plugins/history
+	url = https://github.com/browserstate/history.js.git
