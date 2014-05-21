@@ -120,3 +120,5 @@ require get_template_directory() . '/inc/mywalker.php';
 
 /*ajax*/
 require get_template_directory() . '/inc/ajax.php';
+
+require get_template_directory() . '/inc/removerss.php';

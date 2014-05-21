@@ -8,10 +8,10 @@
  */
 
 require(get_template_directory().'/inc/mobiledetect/Mobile_Detect.php');
-$mobile ;
+$mobile;
 $detect = new Mobile_Detect;
-if ( $detect->isMobile() ) {
-	$mobile = 'mobile'; 	
+if ( !$detect->isMobile() ) {
+	$mobile = 'desktop'; 	
 }
 if ( $detect->isTablet() ) {
 	$mobile .= ' tablet'; 	
@@ -52,8 +52,8 @@ if( $detect->isMobile() && !$detect->isTablet() ){
 ?>
 </head>
 
-<body <?php body_class($mobile); ?>>
-<div id="page" class="hfeed site">
+<body <?php body_class(); ?>>
+<div id="page" class="<?php echo $mobile; ?>">
 
 	<header id="masthead" class="site-header" role="banner">
 		<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>

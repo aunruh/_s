@@ -26,10 +26,8 @@ class Layout{
 	}
 
 	public function get_content($postid){
-
 		echo 'content ';
 		echo $postid;
-
 	}
 
 }

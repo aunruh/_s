@@ -3,7 +3,7 @@ var spa;
 spa = (function(){
 	var configMap = {
 		example : 15,
-		ajaxData : {
+		ajaxContentData : {
 			action: 'get_content',
 			id: null
 		}
@@ -14,11 +14,11 @@ spa = (function(){
 	// jquery containers
 	jqueryMap = {
 		$primary : null,
-		$menulinks : null
+		$menulinks : null,
+		$body : null
 	},
 	// module scope function names
 	setjqueryMap, initModule, initHistory, swapContent, onMenuClick;
-
 
 	onMenuClick = _.throttle(function(e){
 		
@@ -26,11 +26,14 @@ spa = (function(){
 		var rawTitle = $(this).text();
 		var title = rawTitle+" — "+passedData.title;
 		var id = parseInt($(this.parentNode).attr('id'), 10);
+		rawTitle = rawTitle.toLowerCase();
+		rawTitle = rawTitle.replace(" ", "-");
 
 		if( id != stateMap.history.data.pageId ){
-			configMap.ajaxData.id = id;
-			History.pushState({pageId: id}, title, href);
-			stateMap.historyState = History.getState();
+			configMap.ajaxContentData.id = id;
+			
+			History.pushState({pageId: id, rawTitle: rawTitle}, title, href);
+			stateMap.history = History.getState();
 		}
 
 		return false;
@@ -44,7 +47,7 @@ spa = (function(){
 			jQuery.ajax({
 				type: 'POST',
 				url: passedData.ajaxUrl,
-				data: configMap.ajaxData,
+				data: configMap.ajaxContentData,
 				success: function(result) {
 					newContent = result;
 				}
@@ -54,7 +57,7 @@ spa = (function(){
 
 			).then(function() {
 				jqueryMap.$primary.html(newContent);
-				History.pushState({ pageId: stateMap.history.data.pageId }, stateMap.history.title, stateMap.history.url);
+				jqueryMap.$body.removeClass().addClass('id-'+stateMap.history.data.pageId).addClass('title-'+stateMap.history.data.rawTitle);
 			}
 		);
 	};
@@ -62,7 +65,7 @@ spa = (function(){
 	initHistory = function(){
 		//save initial state to browser history
 		var origTitle = document.title;
-		History.pushState({ pageId: jqueryMap.$primary.attr('data-id') }, origTitle, document.URL);
+		History.pushState({ pageId: jqueryMap.$primary.attr('data-id'), rawTitle: origTitle }, origTitle, document.URL);
 		stateMap.history = History.getState();
 
 		// Bind to StateChange Event
@@ -75,6 +78,7 @@ spa = (function(){
 	setjqueryMap = function(){
 		jqueryMap.$primary = jQuery('#primary');
 		jqueryMap.$menulinks = jQuery('.main-navigation a');
+		jqueryMap.$body = jQuery('body');
 	};
 
 	initModule = function(){
