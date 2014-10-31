@@ -7,7 +7,6 @@
  * @package _s
  */
 
-require(get_template_directory().'/inc/mobiledetect/Mobile_Detect.php');
 $mobile;
 $detect = new Mobile_Detect;
 if ( !$detect->isMobile() ) {
@@ -21,7 +20,7 @@ if( $detect->isMobile() && !$detect->isTablet() ){
 }
 
 ?><!DOCTYPE html>
-<html <?php language_attributes(); ?>>
+<html <?php language_attributes(); ?> class="<?php echo getMobileDetectClasses();?>">
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -52,8 +51,8 @@ if( $detect->isMobile() && !$detect->isTablet() ){
 ?>
 </head>
 
-<body <?php body_class(); ?>>
-<div id="page" class="<?php echo $mobile; ?>">
+<body <?php my_body_class(); ?>>
+<div id="page" class="<?php echo getMobileDetectClasses();?>">
 
 	<header id="masthead" class="site-header" role="banner">
 		<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>

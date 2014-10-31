@@ -1,16 +1,22 @@
-var spa;
-
-spa = (function(){
+spa.main = (function(){
 	var configMap = {
-		example : 15,
-		ajaxContentData : {
-			action: 'get_content',
-			id: null
-		}
+		example : 15
+	},
+	ajaxContentData = {
+		action: 'get_content',
+		id: null,
+		type: null,
+		// can be phone, tablet or desktop
+		currentSize : null,
 	},
 	stateMap = {
 		history : null,
-	},
+		wWidth : verge.viewportW(),
+		wHeight : window.innerHeight,
+		deviceType : passedData.mobileDetect,
+		// can be 'phone', 'desktop' or 'tablet'
+		currentSize : 'desktop',
+	}
 	// jquery containers
 	jqueryMap = {
 		$primary : null,
@@ -20,19 +26,19 @@ spa = (function(){
 	// module scope function names
 	setjqueryMap, initModule, initHistory, swapContent, onMenuClick;
 
-	onMenuClick = _.throttle(function(e){
-		
+	var onMenuClick = _.throttle(function(e){
 		var href = $(this).attr('href');
 		var rawTitle = $(this).text();
-		var title = rawTitle+" — "+passedData.title;
+		var title = passedData.title+" | "+rawTitle;
 		var id = parseInt($(this.parentNode).attr('id'), 10);
 		rawTitle = rawTitle.toLowerCase();
 		rawTitle = rawTitle.replace(" ", "-");
 
 		if( id != stateMap.history.data.pageId ){
 			configMap.ajaxContentData.id = id;
-			
-			History.pushState({pageId: id, rawTitle: rawTitle}, title, href);
+			configMap.ajaxContentData.type = 'get_content';
+
+			History.pushState({pageId: id, rawTitle: rawTitle, type: 'get_content'}, title, href);
 			stateMap.history = History.getState();
 		}
 
@@ -40,7 +46,7 @@ spa = (function(){
 
 	}, 1000);
 
-	swapContent = function(){
+	var swapContent = function(){
 		var newContent;
 		jQuery.when(
 			
@@ -62,7 +68,7 @@ spa = (function(){
 		);
 	};
 
-	initHistory = function(){
+	var initHistory = function(){
 		//save initial state to browser history
 		var origTitle = document.title;
 		History.pushState({ pageId: jqueryMap.$primary.attr('data-id'), rawTitle: origTitle }, origTitle, document.URL);
@@ -71,27 +77,26 @@ spa = (function(){
 		// Bind to StateChange Event
 		History.Adapter.bind(window,'statechange',_.throttle(function(){ // Note: We are using statechange instead of popstate
 			stateMap.history = History.getState(); // Note: We are using History.getState() instead of event.state
+			jQuery('.menu-item').removeClass('current-menu-item current-menu-parent current-post-ancestor current-post-parent');
 			swapContent();
 		},300));
 	};
 
-	setjqueryMap = function(){
+	var setjqueryMap = function(){
 		jqueryMap.$primary = jQuery('#primary');
 		jqueryMap.$menulinks = jQuery('.main-navigation a');
 		jqueryMap.$body = jQuery('body');
 	};
 
-	initModule = function(){
+	var initModule = function(){
 		setjqueryMap();
 		initHistory();
 		jqueryMap.$menulinks.click(onMenuClick);
 		console.log('init');
 	};
 
-	return { initModule : initModule };
+	return {
+	  initModule : initModule
+	}
 
 }());
-
-jQuery(document).ready(function(){
-	spa.initModule();
-});
